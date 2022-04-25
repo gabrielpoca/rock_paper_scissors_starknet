@@ -179,18 +179,6 @@ func finish_game{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
         return ()
     end
 
-    if move_one == ROCK:
-        if move_two == PAPER:
-            ERC721_mint(player_two, _game_id)
-            winner_storage.write(game_id, player_two)
-        else:
-            ERC721_mint(player_one, _game_id)
-            winner_storage.write(game_id, player_one)
-        end
-    else:
-        return ()
-    end
-
     if move_one == PAPER:
         if move_two == SCISSORS:
             ERC721_mint(player_two, _game_id)
@@ -200,7 +188,23 @@ func finish_game{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
             winner_storage.write(game_id, player_one)
         end
     else:
-        return ()
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
+    end
+
+    if move_one == ROCK:
+        if move_two == PAPER:
+            ERC721_mint(player_two, _game_id)
+            winner_storage.write(game_id, player_two)
+        else:
+            ERC721_mint(player_one, _game_id)
+            winner_storage.write(game_id, player_one)
+        end
+    else:
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
     end
 
     if move_one == SCISSORS:
@@ -212,7 +216,9 @@ func finish_game{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
             winner_storage.write(game_id, player_one)
         end
     else:
-        return ()
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
     end
 
     return ()
