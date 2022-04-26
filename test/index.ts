@@ -11,7 +11,7 @@ const PASS_ONE = 123;
 const PASS_TWO = 234;
 
 describe("Game", function () {
-  this.timeout(60_000); // 30 seconds - recommended if used with starknet-devnet
+  this.timeout(120_000); // 30 seconds - recommended if used with starknet-devnet
 
   let contract: StarknetContract;
   let playerOne: Account;
@@ -89,6 +89,18 @@ describe("Game", function () {
     const { game } = await contract.call("game", { game_id: 0 });
 
     expect(game.winner).to.eq(BigInt(playerTwo.starknetContract.address));
+  });
+
+  it("has no winner when both play the same move", async () => {
+    await playPlayerOne(PAPER);
+    await playPlayerTwo(PAPER);
+
+    await revealPlayerOne(PAPER);
+    await revealPlayerTwo(PAPER);
+
+    const { game } = await contract.call("game", { game_id: 0 });
+
+    expect(game.winner).to.eq(0n);
   });
 
   describe("reveal", () => {
